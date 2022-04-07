@@ -22,7 +22,12 @@ switch($action){
 			$nom =  $visiteur['nom'];
 			$prenom = $visiteur['prenom'];
 			connecter($id,$nom,$prenom);
-			include("vues/v_sommaire.php");
+			if ($visiteur['statut'] == 0){
+				include("vues/v_sommaire.php");
+			}
+			else {
+				include("vues/c_sommaire.php");
+			}
 		}
 		break;
 	}
