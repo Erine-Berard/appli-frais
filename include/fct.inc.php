@@ -170,11 +170,13 @@ function valideInfosFrais($dateFrais,$libelle,$montant){
 	if($montant == ""){
 		ajouterErreur("Le champ montant ne peut pas être vide");
 	}
-	else
+	else{
 		if( !is_numeric($montant) ){
 			ajouterErreur("Le champ montant doit être numérique");
 		}
+	}
 }
+
 /**
  * Ajoute le libellé d'une erreur au tableau des erreurs 
  

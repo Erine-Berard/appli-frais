@@ -28,7 +28,7 @@
           
           }
 	?>	  
-                                          
+                                           
     </table>
       <form action="index.php?uc=gererFrais&action=validerCreationFrais" method="post">
       <div class="corpsForm">

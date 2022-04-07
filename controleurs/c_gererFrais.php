@@ -39,7 +39,7 @@ switch($action){
 	case 'supprimerFrais':{
 		$idFrais = $_REQUEST['idFrais'];
 	    $pdo->supprimerFraisHorsForfait($idFrais);
-		break;
+		break; 
 	}
 }
 $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($idVisiteur,$mois);
