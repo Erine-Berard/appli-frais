@@ -51,12 +51,26 @@ class PdoGsb{
  
  * @param $login 
  * @param $mdp
- * @return l'id, le nom et le prénom sous la forme d'un tableau associatif 
+ * @return l'id, le nom , le statut et le prénom sous la forme d'un tableau associatif 
 */
 	public function getInfosVisiteur($login, $mdp){
 		$req = "select visiteur.id as id, visiteur.nom as nom, visiteur.prenom as prenom, visiteur.statut as statut
 		from visiteur 
 		where visiteur.login='$login' and visiteur.mdp='$mdp'";
+		$rs = PdoGsb::$monPdo->query($req);
+		$ligne = $rs->fetch();
+		return $ligne;
+	}
+/**
+ * Retourne les informations d'un visiteur a partir d'un id 
+ 
+ * @param $idVisiteur 
+ * @return le nom et le prénom sous la forme d'un tableau associatif 
+*/
+	public function getInfosVisiteurId($idVisiteur){
+		$req = "select id, nom, prenom
+		from visiteur 
+		where visiteur.id='$idVisiteur'";
 		$rs = PdoGsb::$monPdo->query($req);
 		$ligne = $rs->fetch();
 		return $ligne;
@@ -118,16 +132,28 @@ class PdoGsb{
 		return $lesLignes; 
 	}
 /**
- * Retourne tous les id de la table FraisForfait
+ * Retourne tous les frais d'un visiteur
  
+ * @param $idVisiteur 
  * @return un tableau associatif 
 */
-	public function getLesIdFrais(){
-		$req = "select fraisforfait.id as idfrais from fraisforfait order by fraisforfait.id";
+	public function getLesFraisVisiteur($idVisiteur){
+		$req = "SELECT * FROM `fichefrais`WHERE idVisiteur='$idVisiteur' and idEtat = 'VA'";
 		$res = PdoGsb::$monPdo->query($req);
 		$lesLignes = $res->fetchAll();
 		return $lesLignes;
 	}
+/**
+ * Retourne tous les id de la table FraisForfait
+ 
+ * @return un tableau associatif 
+*/
+public function getLesIdFrais(){
+	$req = "select fraisforfait.id as idfrais from fraisforfait order by fraisforfait.id";
+	$res = PdoGsb::$monPdo->query($req);
+	$lesLignes = $res->fetchAll();
+	return $lesLignes;
+}
 /**
  * Met à jour la table ligneFraisForfait
  
@@ -270,6 +296,28 @@ class PdoGsb{
 			$laLigne = $res->fetch(); 		
 		}
 		return $lesMois;
+	}/**
+* Retourne tous les visiteurs
+ 
+ * @return un tableau avec l'id, le nom et le prenom des visiteurs 
+*/
+	public function getLesVisiteurs(){
+		$req = "SELECT id, nom, prenom FROM `visiteur`";
+		$res = PdoGsb::$monPdo->query($req);
+		$lesVisiteurs =array();
+		$laLigne = $res->fetch();
+		while($laLigne != null)	{
+			$id = $laLigne['id'];
+			$nom = $laLigne['nom'];
+			$prenom = $laLigne['prenom'];
+			$lesVisiteurs["$id"]=array(
+				"id"=>"$id",
+				"nom"  => "$nom",
+				"prenom"  => "$prenom"
+            );
+			$laLigne = $res->fetch(); 		
+		}
+		return $lesVisiteurs;
 	}
 /**
  * Retourne les informations d'une fiche de frais d'un visiteur pour un mois donné

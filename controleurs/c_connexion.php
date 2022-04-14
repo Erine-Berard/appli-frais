@@ -12,7 +12,7 @@ switch($action){
 		$login = $_REQUEST['login'];
 		$mdp = $_REQUEST['mdp'];
 		$visiteur = $pdo->getInfosVisiteur($login,$mdp);
-		if(!is_array( $visiteur)){
+		if(!is_array($visiteur)){
 			ajouterErreur("Login ou mot de passe incorrect");
 			include("vues/v_erreurs.php");
 			include("vues/v_connexion.php");
@@ -26,7 +26,7 @@ switch($action){
 				include("vues/v_sommaire.php");
 			}
 			else {
-				include("vues/c_sommaire.php");
+				include("vues/v_sommaireComptable.php");
 			}
 		}
 		break;

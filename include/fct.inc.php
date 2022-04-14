@@ -53,17 +53,38 @@ function dateAnglaisVersFrancais($maDate){
    return $date;
 }
 /**
+ * retourne le mois au format mm/aaaa selon le jour dans le mois
+ 
+ * @param $date au format  mmaaaa
+ * @return le mois au format mm/aaaa
+*/
+function getMois2($date){
+	$mois = '';
+	$annee = '';
+	//cho $date;
+
+	for ($i = 0; $i < strlen($date); $i++){
+		if ($i < 4){
+			$annee = $annee.$date[$i];
+		}
+		else if ($i < 6){
+			$mois = $mois.$date[$i];
+		}
+	}
+	return $mois.'/'.$annee;
+}
+/**
  * retourne le mois au format aaaamm selon le jour dans le mois
  
  * @param $date au format  jj/mm/aaaa
  * @return le mois au format aaaamm
 */
 function getMois($date){
-		@list($jour,$mois,$annee) = explode('/',$date);
-		if(strlen($mois) == 1){
-			$mois = "0".$mois;
-		}
-		return $annee.$mois;
+	@list($jour,$mois,$annee) = explode('/',$date);
+	if(strlen($mois) == 1){
+		$mois = "0".$mois;
+	}
+	return $annee.$mois;
 }
 
 /* gestion des erreurs*/
