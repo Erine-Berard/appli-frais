@@ -75,7 +75,26 @@ class PdoGsb{
 		$ligne = $rs->fetch();
 		return $ligne;
 	}
-
+/**
+ * Change l'état de toutes les commandes du mois précédent en CL
+ 
+ * @param $idVisiteur 
+ * @return le nom et le prénom sous la forme d'un tableau associatif 
+*/
+public function changementEtatCL (){
+	$date = date("Ym");
+	$req = "SELECT * FROM `fichefrais` WHERE idEtat = 'CR' and mois < '".$date."'";
+	$rs = PdoGsb::$monPdo->query($req);
+	$lignes = $rs->fetchAll();
+	foreach ($lignes as $ligne){
+		$req = "UPDATE `fichefrais` 
+				SET `idEtat` = 'CL' 
+				WHERE `fichefrais`.`idVisiteur` = '".$ligne['idVisiteur']."' AND `fichefrais`.`mois` = '".$ligne['mois']."';";
+		$rs = PdoGsb::$monPdo->query($req);
+		$result = $rs->fetch();
+	}
+	return $ligne;
+}
 /**
  * Retourne sous forme d'un tableau associatif toutes les lignes de frais hors forfait
  * concernées par les deux arguments
