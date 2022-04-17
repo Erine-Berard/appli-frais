@@ -5,10 +5,11 @@ $idVisiteur = $_SESSION['idVisiteur'];
 switch($action){
 	case 'selectionVisiteur':{
 		$lesVisiteurs = $pdo->getLesVisiteurs();
+		$lesMois=$pdo->getLesMoisDisponibles($idVisiteur);
 		include("vues/v_suivreFrais.php");
 		break;
 	}
-	case 'voirFraisVisiteur':{
+	case 'voirFraisVisiteur':{ 
 		//Tableau avec tous les visiteurs 
 		$lesVisiteurs = $pdo->getLesVisiteurs();
 
