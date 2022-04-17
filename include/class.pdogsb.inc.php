@@ -81,9 +81,9 @@ class PdoGsb{
  * @param $idVisiteur 
  * @return le nom et le prénom sous la forme d'un tableau associatif 
 */
-public function changementEtatCL (){
+public function changementEtatCL ($idVisiteur){
 	$date = date("Ym");
-	$req = "SELECT * FROM `fichefrais` WHERE idEtat = 'CR' and mois < '".$date."'";
+	$req = "SELECT * FROM `fichefrais` WHERE idEtat = 'CR' and mois < '".$date."' and idVisiteur = '".$idVisiteur."'" ;
 	$rs = PdoGsb::$monPdo->query($req);
 	$lignes = $rs->fetchAll();
 	foreach ($lignes as $ligne){
@@ -93,7 +93,7 @@ public function changementEtatCL (){
 		$rs = PdoGsb::$monPdo->query($req);
 		$result = $rs->fetch();
 	}
-	return $ligne;
+	return;
 }
 /**
  * Retourne sous forme d'un tableau associatif toutes les lignes de frais hors forfait

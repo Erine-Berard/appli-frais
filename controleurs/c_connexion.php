@@ -26,7 +26,6 @@ switch($action){
 				include("vues/v_sommaire.php");
 			}
 			else {
-				$pdo->changementEtatCL();
 				include("vues/v_sommaireComptable.php");
 			}
 		}
