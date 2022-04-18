@@ -11,29 +11,19 @@
           $nom =  $unVisiteur['nom'];
           $prenom =  $unVisiteur['prenom'];
           ?>
-            <option value="<?php echo $visiteur ?>"><?php echo  $nom." ".$prenom ?> </option>
+            <option value="<?php echo $visiteur; ?>"><?php echo  $nom." ".$prenom ;?> </option>
           <?php 
         }
       ?>      
     </select>
     <label for="lstMois" accesskey="n">Mois : </label>
     <select id="lstMois" name="lstMois">
-      <?php
+      <?php 
         foreach ($lesMois as $unMois)
         {
-          $mois = $unMois['mois'];
-          $numAnnee =  $unMois['numAnnee'];
-          $numMois =  $unMois['numMois'];
-          if($mois == $moisASelectionner){
-            ?>
-              <option selected value="<?php echo $mois ?>"><?php echo  $numMois."/".$numAnnee ?> </option>
-            <?php 
-          }
-          else{ 
-            ?>
-              <option value="<?php echo $mois ?>"><?php echo  $numMois."/".$numAnnee ?> </option>
-            <?php 
-          }
+          ?>
+            <option selected value="<?php echo $unMois; ?>"><?php echo getMois2($unMois); ?> </option>
+          <?php 
         }  
       ?>    
     </select>

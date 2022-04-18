@@ -61,7 +61,6 @@ function dateAnglaisVersFrancais($maDate){
 function getMois2($date){
 	$mois = '';
 	$annee = '';
-	//cho $date;
 
 	for ($i = 0; $i < strlen($date); $i++){
 		if ($i < 4){

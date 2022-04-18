@@ -208,6 +208,7 @@ class PdoGsb{
 	*/
 		public function majFraisForfait($idVisiteur, $mois, $lesFrais){
 			$lesCles = array_keys($lesFrais);
+			
 			foreach($lesCles as $unIdFrais){
 				$qte = $lesFrais[$unIdFrais];
 				$req = "update lignefraisforfait set lignefraisforfait.quantite = $qte
@@ -403,12 +404,14 @@ class PdoGsb{
 			$req = "update ficheFrais set idEtat = '$etat', dateModif = now() 
 			where fichefrais.idvisiteur ='$idVisiteur' and fichefrais.mois = '$mois'";
 			PdoGsb::$monPdo->exec($req);
+			return;
 		}
+
 
 	/**
 	 * Retourne les fiche de frais validé et mise en payement
 	 
-	* @return un tableau avec des champs de jointure entre une fiche de frais et la ligne d'état 
+	* @return un tableau avec les fiches de frais
 	*/	
 		public function getFraisVA(){
 			$req = "SELECT * FROM `fichefrais` WHERE idEtat = 'VA'";
@@ -416,6 +419,87 @@ class PdoGsb{
 			$lignes = $res->fetchALL();
 			return $lignes;
 		}
+
+	/**
+	 * Retourne les mois qui ont un minimum une fiche de frais
+	 
+	* @return un tableau associatif avec le mois et l'année 
+	*/	
+	public function getLesMois(){
+		$req = "SELECT fichefrais.mois as mois
+				FROM fichefrais
+				ORDER BY fichefrais.mois desc";
+		$res = PdoGsb::$monPdo->query($req);
+
+		$lesMois = array();
+		$lignes = $res->fetchALL();
+		foreach ($lignes as $ligne){
+			$date = $ligne['mois'];
+			if ($lesMois != null){
+				for ($i = 0; $i < count($lesMois); $i++){
+					if ($lesMois[$i] == $date){
+						break;
+					}
+					else if ($lesMois[$i] != $date && $i+1 == count($lesMois)){
+						array_push($lesMois, $date);
+					}
+				}
+			}
+			else {
+				array_push($lesMois, $date);
+			}
+		}
+		return $lesMois;
+	}
+
+	/**
+	* Refuse une fiche hors frais 
+	 
+	* @param $i
+	*/
+	public function refuserHorsFrais($id){
+		//Modifie le libelle
+			$req = "SELECT * FROM `lignefraishorsforfait` WHERE id = ".$id;
+			$res = PdoGsb::$monPdo->query($req);
+			$ligne = $res->fetch();
+			$libelle = 'REFUSE '.$ligne['libelle'];
+			if (strlen($libelle)>100){
+				$libelle = substr($libelle, 0, 100);
+			}
+
+		//Modifie la BDD
+		    $req = "UPDATE `lignefraishorsforfait` SET `libelle` = '".$libelle."' WHERE `lignefraishorsforfait`.`id` = ".$id;
+			PdoGsb::$monPdo->exec($req);
+			return; 
+	}
+
+
+	/**
+	* Reporter une fiche hors frais 
+	 
+	* @param $i
+	*/
+	public function reporterHorsFrais($id,$idVisiteur){
+		//Modifie le libelle
+			$req = "SELECT * FROM `lignefraishorsforfait` WHERE id = ".$id;
+			$res = PdoGsb::$monPdo->query($req);
+			$ligne = $res->fetch();
+			$date = getMois(date('d/m/Y'));
+			$dateCourente = date('d/m/Y');
+
+			$lesInfosFicheFrais = $this->getLesInfosFicheFrais($idVisiteur,$date);
+			if($lesInfosFicheFrais == null){
+				$this->creeNouvellesLignesFrais($idVisiteur,$date);
+			}
+			$this->creeNouveauFraisHorsForfait($ligne['idVisiteur'],$date,$ligne['libelle'],$dateCourente,$ligne['montant']);
+
+			$req = "DELETE FROM `lignefraishorsforfait` WHERE `lignefraishorsforfait`.`id` = ".$ligne['id'];
+			PdoGsb::$monPdo->exec($req);
+			return;
+	}
+	
+	
+	
 }
 
 ?>
