@@ -10,10 +10,10 @@ switch($action){
 	}
 	case 'valideConnexion':{
 		$login = $_REQUEST['login'];
-		$mdp = $_REQUEST['mdp'];
-		$pdo->crypterMDP();
+		$mdpAv = $_REQUEST['mdp'];
+		$mdp = md5($mdpAv);
 		$visiteur = $pdo->getInfosVisiteur($login,$mdp);
-		if(!is_array($visiteur)){
+		if(!is_array($visiteur)){ // Vérifie si le mp et login est correct
 			ajouterErreur("Login ou mot de passe incorrect");
 			include("vues/v_erreurs.php");
 			include("vues/v_connexion.php");
@@ -22,11 +22,11 @@ switch($action){
 			$id = $visiteur['id'];
 			$nom =  $visiteur['nom'];
 			$prenom = $visiteur['prenom'];
-			connecter($id,$nom,$prenom);
-			if ($visiteur['statut'] == 0){
+			connecter($id,$nom,$prenom); // Connect l'utilisateur 
+			if ($visiteur['statut'] == 0){ // Si l'utilisateur est un visiteur
 				include("vues/v_sommaire.php");
 			}
-			else {
+			else { // Si l'utilisateur est un comptable 
 				include("vues/v_sommaireComptable.php");
 			}
 		}

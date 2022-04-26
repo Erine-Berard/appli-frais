@@ -3,12 +3,12 @@ include("vues/v_sommaireComptable.php");
 $action = $_REQUEST['action'];
 $idVisiteur = $_SESSION['idVisiteur'];
 switch($action){
-	case 'voirTouslesFrais':{
+	case 'voirTouslesFrais':{ // Affiche tableau avec toutes les fiches de frais 
 		$lignes = $pdo->getFraisVA();
 		include("vues/v_listeFraisVA.php");
 		break;
 	}
-	case 'voirUneFicheDeFrais':{
+	case 'voirUneFicheDeFrais':{ // Affiche une fiche de frais
 		//Récupère le mois et l'ID du visiteur de la fiche
 			$leMois = $_GET['mois']; 
 			$idVisiteur = $_GET['idVisiteur'];
@@ -34,7 +34,7 @@ switch($action){
 		include("vues/v_etatFraisVA.php");
 		break;
 	}
-	case 'changerEtat':{
+	case 'changerEtat':{ // Change l'état de la fiche en RB
 		//Modifie l'etat de la fiche
 		$leMois = $_GET['mois']; 
 		$idVisiteur = $_GET['idVisiteur'];
